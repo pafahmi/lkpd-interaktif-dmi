@@ -1,0 +1,3 @@
+import { env } from "cloudflare:workers";
+import { now, requireSession } from "@/lib/session";
+export async function POST(request:Request){const s=await requireSession(request),at=now();if(s){await env.DB.batch([env.DB.prepare(`UPDATE sessions SET logout_at=?,last_active_at=? WHERE id=?`).bind(at,at,s.session_id),env.DB.prepare(`INSERT INTO activities(student_id,session_id,event_type,page,detail,created_at) VALUES(?,?,?,?,?,?)`).bind(s.student_id,s.session_id,"logout","Keluar",null,at)]);}return Response.json({ok:true},{headers:{"Set-Cookie":"dmi_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0"}})}

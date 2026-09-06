@@ -1,0 +1,4 @@
+import { env } from "cloudflare:workers";
+import { isAdmin } from "@/lib/session";
+const csv=(v:unknown)=>`"${String(v??"").replaceAll('"','""')}"`;
+export async function GET(request:Request){if(!isAdmin(request))return Response.json({error:"Akses guru diperlukan"},{status:403});const rows=await env.DB.prepare(`SELECT st.student_name,st.class_name,st.phone_masked,a.event_type,a.page,a.detail,a.created_at FROM activities a JOIN students st ON st.id=a.student_id ORDER BY st.class_name,st.student_name,a.created_at DESC`).all();const header=["Nama Siswa","Kelas","Nomor HP (tersamar)","Aktivitas","Tahap","Detail","Waktu"];const body=rows.results.map((r:any)=>[r.student_name,r.class_name,r.phone_masked,r.event_type,r.page,r.detail,r.created_at].map(csv).join(","));return new Response('\ufeff'+[header.map(csv).join(","),...body].join("\n"),{headers:{"Content-Type":"text/csv; charset=utf-8","Content-Disposition":`attachment; filename="log-aktivitas-lkpd-dmi.csv"`}})}

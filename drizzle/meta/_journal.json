@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788712010029,
+      "tag": "0000_special_rhodey",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788713194776,
+      "tag": "0001_boring_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788714094592,
+      "tag": "0002_long_randall",
+      "breakpoints": true
+    }
+  ]
+}
